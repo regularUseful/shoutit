@@ -1,3 +1,9 @@
+<?php include 'database.php'; ?>
+<?php include 'process.php'; ?>
+<?php $query = "SELECT * FROM shouts ORDER BY id DESC";
+    $shouts = mysqli_query($con, $query);
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,22 +18,23 @@
             </header>
             <div id="shouts">
                 <ul>
-                    <li class="shout"><span>8pm</span>nathe: Sup</li>
-                    <li class="shout"><span>8pm -</span>nate: Sup</li>
-                    <li class="shout"><span>8pm -</span>nate: sup</li>
-                    <li class="shout"><span>8pm -</span>nate: Sup</li>
-                    <li class="shout"><span>8pm -</span>nate: Sup</li>
-                    <li class="shout"><span>8pm -</span>nate: Sup</li>
+                    <?php while($row = mysqli_fetch_assoc($shouts)) : ?>
+                        <li class="shout"><span><?php echo $row['time'] ?> - </span><strong><?php echo $row['user'] ?>: </strong><?php echo $row['message'] ?></li>
+                    <?php endwhile; ?>
                 </ul> 
             </div>
             <div id="input">
-                <form method="post" action="process.php">
+                <form method="POST" action="process.php">
                     <input type="text" name="user" placeholder="Enter your name">
-                    <input type="text" name="message" placeholder="Enter your name">
+                    <input type="text" name="message" placeholder="Enter your message">
                     <br />
                     <input type="submit" class="shout-btn" name="submit" value="Shout It Out"> 
                 </form>
             </div>
         </div>
+        <?php if(isset($_GET["error"])){
+            echo $_GET["error"];
+        }
+        ?>
     </body>
 </html>
